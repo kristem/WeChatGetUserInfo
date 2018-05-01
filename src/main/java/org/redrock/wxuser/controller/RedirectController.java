@@ -43,14 +43,14 @@ public class RedirectController {
             String WebAccessToken = "";
             String openId = "";
             String nickName,sex,openid = "";
-            String REDIRECT_URI = "mis.cqupt.deu.cn/url";
+            String REDIRECT_URI = "mis.cqupt.deu.cn/getinfo";
             String SCOPE = "snsapi_userinfo";
 
             String getCodeUrl = UserInfoUtil.getCode(WX_APPID, REDIRECT_URI, SCOPE);
-            logger.info("第一步:用户授权, get Code URL:{}", getCodeUrl);
+            logger.info("用户授权, get Code URL:{}", getCodeUrl);
 
             String tokenUrl = UserInfoUtil.getWebAccess(WX_APPID, WX_APPSECRET, code);
-            logger.info("第二步:get Access Token URL:{}", tokenUrl);
+            logger.info("get Access Token URL:{}", tokenUrl);
 
             String response = HttpsUtil.httpsRequestToString(tokenUrl, "GET", null);
 
@@ -67,7 +67,7 @@ public class RedirectController {
                     logger.info("WebAccessToken:{} , openId:{}", WebAccessToken, openId);
 
                     String userMessageUrl = UserInfoUtil.getUserMessage(WebAccessToken, openId);
-                    logger.info("第三步:获取用户信息的URL:{}", userMessageUrl);
+                    logger.info("获取用户信息的URL:{}", userMessageUrl);
 
                     String userMessageResponse = HttpsUtil.httpsRequestToString(userMessageUrl, "GET", null);
                     JSONObject userMessageJsonObject = JSON.parseObject(userMessageResponse);
