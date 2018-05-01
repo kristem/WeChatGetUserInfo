@@ -19,9 +19,8 @@ public class RedirectController {
     public static final String WX_APPID = "wx3faab44f6c3df1c0";
     public static final String WX_APPSECRET = "93a1458ff94cfe569f5ef66b2c7e4898";
 
+
     /**
-     *
-     /**
      * 微信网页授权流程:
      * 1. 用户同意授权,获取 code
      * 2. 通过 code 换取网页授权 access_token
@@ -30,9 +29,8 @@ public class RedirectController {
      * @param state 重定向状态参数
      * @return
      */
-
     @GetMapping("/getinfo")
-    public String wechatLogin(@RequestParam(name = "code", required = false) String code,
+    public String wecahtLogin(@RequestParam(name = "code", required = false) String code,
                               @RequestParam(name = "state") String state) {
 
         logger.info("收到微信重定向跳转.");
@@ -57,7 +55,6 @@ public class RedirectController {
             JSONObject jsonObject = JSON.parseObject(response);
             logger.info("请求到的Access Token:{}", jsonObject.toJSONString());
 
-
             if (null != jsonObject) {
                 try {
 
@@ -67,17 +64,22 @@ public class RedirectController {
                     logger.info("WebAccessToken:{} , openId:{}", WebAccessToken, openId);
 
                     String userMessageUrl = UserInfoUtil.getUserMessage(WebAccessToken, openId);
-                    logger.info("获取用户信息的URL:{}", userMessageUrl);
+                    logger.info("第三步:获取用户信息的URL:{}", userMessageUrl);
 
                     String userMessageResponse = HttpsUtil.httpsRequestToString(userMessageUrl, "GET", null);
+
                     JSONObject userMessageJsonObject = JSON.parseObject(userMessageResponse);
+
                     logger.info("用户信息:{}", userMessageJsonObject.toJSONString());
 
                     if (userMessageJsonObject != null) {
                         try {
+
                             nickName = userMessageJsonObject.getString("nickname");
+
                             sex = userMessageJsonObject.getString("sex");
                             sex = (sex.equals("1")) ? "男" : "女";
+
                             openid = userMessageJsonObject.getString("openid");
 
                             logger.info("用户昵称:{}", nickName);
